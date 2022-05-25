@@ -1,53 +1,85 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { MyTokenAuthGuard } from 'src/common/guards/token.guard';
-import { ResponseTool } from 'src/tools/response.tool';
-import { GetUser } from '../user/decorator/getUser.decorator';
-import { UserDTO } from '../user/dto/user.dto';
-import { UserDocument } from '../user/user.entity';
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import {
+  BaseApiErrorResponse,
+  BaseApiResponse,
+  SwaggerBaseApiResponse,
+} from 'src/shared/dto/response.dto';
+import { AppLogger } from 'src/shared/logger/logger.service';
+import { ReqContext } from 'src/shared/request-context/req-context.decorator';
+import { RequestContext } from 'src/shared/request-context/request-context.dto';
 import { AuthService } from './auth.service';
-import { AccessTokenResponse } from './dto/accessTokenResponse.dto';
-import { LoginInput } from './dto/login-input.dto';
+import { AuthOutput } from './dto/auth-output.dto';
+import { AuthTokenOutput } from './dto/auth-token-output.dto';
+import { RegisterInput } from './dto/register-input.dto';
 
-@Controller('auth')
 @ApiTags('Auth')
+@Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private readonly logger: AppLogger,
+    private readonly authService: AuthService,
+  ) {}
 
-  @Post('/signup')
-  @ApiOkResponse({
-    type: AccessTokenResponse,
+  @Post('register')
+  @ApiOperation({
+    summary: 'User registration API',
   })
-  async signUp(@Body() userDto: UserDTO): Promise<AccessTokenResponse> {
-    return this.authService.signUp(userDto);
-  }
-
-  @Post('/login')
   @ApiOkResponse({
-    type: AccessTokenResponse,
+    status: HttpStatus.OK,
+    type: SwaggerBaseApiResponse(AuthOutput),
   })
-  async signIn(@Body() loginDTO: LoginInput): Promise<AccessTokenResponse> {
-    return this.authService.signIn(loginDTO);
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    type: BaseApiErrorResponse,
+  })
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async signUp(
+    @ReqContext() ctx: RequestContext,
+    @Body() input: RegisterInput,
+  ): Promise<BaseApiResponse<AuthOutput>> {
+    const response = await this.authService.register(ctx, input);
+    return {
+      data: response,
+      meta: {},
+    };
   }
 
-  @Post('/logout')
-  @ApiOkResponse()
-  @UseGuards(MyTokenAuthGuard)
-  async logout(@GetUser() user): Promise<{ message: string }> {
-    return await this.authService.logout(user as UserDocument);
-  }
-
-  @Post('/forgot-password')
-  async forgotPassword(@Body('email') email: string) {
-    const response = await this.authService.resetPassword(email);
-    return ResponseTool.POST_OK(response);
-  }
-
-  @Post('/google')
+  @Post('login')
+  @ApiOperation({
+    summary: 'User login API',
+  })
   @ApiOkResponse({
-    type: AccessTokenResponse,
+    status: HttpStatus.OK,
+    type: SwaggerBaseApiResponse(AuthTokenOutput),
   })
-  async googleAuth(@Body('tokenId') tokenId: string): Promise<boolean> {
-    return true;
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    type: BaseApiErrorResponse,
+  })
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async signIn(
+    @ReqContext() ctx: RequestContext,
+  ): Promise<BaseApiResponse<AuthTokenOutput>> {
+    const response = await this.authService.login(ctx);
+    return {
+      data: response,
+      meta: {},
+    };
   }
 }

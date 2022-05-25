@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
-import { SignUpInput } from '../auth/dto/signup-input.dto';
+import { RegisterInput } from '../auth/dto/register-input.dto';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 
@@ -8,7 +8,13 @@ import { UserRepository } from './user.repository';
 export class UserService {
   constructor(private readonly repository: UserRepository) {}
 
-  async createUser(input: SignUpInput) {
+  async createUser(input: RegisterInput) {
     return this.repository.save(plainToInstance(User, input));
+  }
+
+  async findById(id: number): Promise<User> {
+    return this.repository.findOne({
+      where: { id },
+    });
   }
 }

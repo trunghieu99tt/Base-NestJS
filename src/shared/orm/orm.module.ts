@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TokenRepository } from 'src/modules/token/token.repository';
+import { UserRepository } from 'src/modules/user/user.repository';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { TokenRepository } from 'src/modules/token/token.repository';
         };
       },
     }),
-    TypeOrmModule.forFeature([TokenRepository]),
+    TypeOrmModule.forFeature([TokenRepository, UserRepository]),
   ],
   exports: [TypeOrmModule],
 })

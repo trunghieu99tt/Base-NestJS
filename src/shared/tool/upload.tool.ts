@@ -3,7 +3,7 @@ import {
   CLOUDINARY_PATH,
   CLOUDINARY_PATH_DEV,
   DEVELOPMENT,
-} from 'src/common/config/env';
+} from 'src/shared/config/env';
 
 const cloudinary = require('cloudinary').v2;
 const sharp = require('sharp');

@@ -1,117 +1,80 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { JWT_EXP } from 'src/common/config/env';
-import { SMTPMailer } from 'src/common/tool/mailer.tool';
-import { v4 as uuid } from 'uuid';
-import { TokenService } from '../token/token.service';
-import { UserService } from '../user/user.service';
-import { PayloadDTO } from './dto/access-token-payload.dto';
-import { AccessTokenResponse } from './dto/accessTokenResponse.dto';
-import { LoginInput } from './dto/login-input.dto';
-import { SignUpInput } from './dto/signup-input.dto';
-import { AuthTool } from './tool/auth.tool';
+import { plainToInstance } from 'class-transformer';
+import { UserAccessTokenClaims } from 'src/shared/dto/token-claim';
+import { AppLogger } from 'src/shared/logger/logger.service';
+import { RequestContext } from 'src/shared/request-context/request-context.dto';
+import { Token } from '../token/token.entity';
+import { TokenRepository } from '../token/token.repository';
+import { User } from '../user/user.entity';
+import { UserRepository } from '../user/user.repository';
+import { AuthOutput } from './dto/auth-output.dto';
+import { AuthTokenOutput } from './dto/auth-token-output.dto';
+import { RegisterInput } from './dto/register-input.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService,
+    private readonly logger: AppLogger,
     private readonly jwtService: JwtService,
-    private readonly tokenService: TokenService,
+    private readonly userRepository: UserRepository,
+    private readonly tokenRepository: TokenRepository,
+    private readonly configService: ConfigService,
   ) {}
 
-  // create jwt access token based on userId
-  async generateAccessToken(
-    userId: number,
-    timestamp: number = Date.now(),
-  ): Promise<string> {
-    const jti = uuid();
-    const payload = {
-      sub: userId,
-      jti,
-    } as PayloadDTO;
+  private async getAuthToken(
+    ctx: RequestContext,
+    user: UserAccessTokenClaims,
+  ): Promise<AuthTokenOutput> {
+    this.logger.log(ctx, `${this.getAuthToken.name} was called`);
 
-    await this.tokenService.setJWTKey(userId, jti, JWT_EXP, timestamp);
-    const accessToken = this.jwtService.sign(payload);
-    return accessToken;
+    const subject = { sub: user.id };
+    const payload = {
+      username: user.username,
+      sub: user.id,
+    };
+
+    const authToken = {
+      refreshToken: this.jwtService.sign(subject, {
+        expiresIn: this.configService.get('jwt.refreshTokenExpiresInSec'),
+      }),
+      accessToken: this.jwtService.sign(
+        { ...payload, ...subject },
+        { expiresIn: this.configService.get('jwt.accessTokenExpiresInSec') },
+      ),
+    };
+    await this.tokenRepository.save(
+      plainToInstance(Token, {
+        userId: user.id,
+        expiresIn: this.configService.get('jwt.accessTokenExpiresInSec'),
+        ...authToken,
+      }),
+    );
+
+    return plainToInstance(AuthTokenOutput, authToken, {
+      excludeExtraneousValues: true,
+    });
   }
 
-  async signUp(
-    input: SignUpInput,
-    timestamp: number = Date.now(),
-  ): Promise<AccessTokenResponse> {
-    const newUser = await this.userService.createUser(input);
-    const accessToken = await this.generateAccessToken(newUser.id, timestamp);
+  async register(
+    ctx: RequestContext,
+    input: RegisterInput,
+  ): Promise<AuthOutput> {
+    this.logger.log(ctx, `${this.register.name} was called`);
+    const newUser = await this.userRepository.save(
+      plainToInstance(User, input),
+    );
+    const { accessToken, refreshToken } = await this.getAuthToken(ctx, newUser);
     return {
       user: newUser,
       accessToken,
+      refreshToken,
     };
   }
 
-  async signIn(
-    loginDto: LoginInput,
-    timestamp: number = Date.now(),
-  ): Promise<AccessTokenResponse> {
-    const { username, password } = loginDto;
-    const user = await this.userService.findByUsernameOrEmail(username);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    const isCorrectPassword = await user.comparePassword(password);
-    if (!isCorrectPassword) {
-      throw new UnauthorizedException('Wrong username/password');
-    }
-    const accessToken = await this.generateAccessToken(user.id, timestamp);
-    return {
-      user,
-      accessToken,
-    };
-  }
-
-  async logout(user: UserDocument): Promise<{ message: string }> {
-    try {
-      await this.tokenService.deleteJWTKey(user.id, user.jti);
-      // delete all expired tokens
-      await this.tokenService.deleteExpiredJWTKeys();
-      return {
-        message: 'Good bye :)',
-      };
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async resetPassword(email: string) {
-    const user = await this.userService.findByUsernameOrEmail(email);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    try {
-      const token = AuthTool.randomToken(6);
-
-      // delete all tokens of this user
-      await this.tokenService.deleteJWTKeysByUserID(user._id);
-      await this.userService.updateUser(user._id, {
-        password: token,
-      });
-
-      SMTPMailer.sendMail(
-        user.email,
-        'Quen mat khau',
-        EmailTool.resetPasswordEmail(user.name, user.username, token),
-      );
-      return {
-        message: 'OK',
-      };
-    } catch (error) {
-      console.log(`error`, error);
-      throw new InternalServerErrorException('Internal server error');
-    }
+  async login(ctx: RequestContext): Promise<AuthTokenOutput> {
+    this.logger.log(ctx, `${this.login.name} was called`);
+    return this.getAuthToken(ctx, ctx.user);
   }
 }

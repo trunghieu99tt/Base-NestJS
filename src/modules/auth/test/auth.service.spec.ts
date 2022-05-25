@@ -9,7 +9,7 @@ import {
   closeInMongodConnection,
   rootMongooseTestModule,
 } from 'test/mongodb-memory';
-import { JWT_EXP, JWT_SECRET } from '../../../common/config/env';
+import { JWT_EXP, JWT_SECRET } from '../../../shared/config/env';
 import { TokenModule } from '../../token/token.module';
 import { TokenService } from '../../token/token.service';
 import { UserModule } from '../../user/user.module';

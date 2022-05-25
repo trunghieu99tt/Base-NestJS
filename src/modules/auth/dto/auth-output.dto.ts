@@ -3,7 +3,7 @@ import { Expose } from 'class-transformer';
 import { IsString } from 'class-validator';
 import { User } from 'src/modules/user/user.entity';
 
-export class AccessTokenResponse {
+export class AuthOutput {
   @ApiProperty({
     type: User,
   })
@@ -13,5 +13,10 @@ export class AccessTokenResponse {
   @ApiProperty()
   @Expose()
   @IsString()
-  accessToken: string;
+  readonly accessToken: string;
+
+  @ApiProperty()
+  @Expose()
+  @IsString()
+  readonly refreshToken: string;
 }

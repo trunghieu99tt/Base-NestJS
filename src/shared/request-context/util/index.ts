@@ -1,11 +1,11 @@
 import { plainToClass } from 'class-transformer';
 import { Request } from 'express';
-
-import { UserAccessTokenClaims } from '../../../modules/auth/dtos/auth-token-output.dto';
 import {
   FORWARDED_FOR_TOKEN_HEADER,
   REQUEST_ID_TOKEN_HEADER,
-} from '../../constants';
+} from 'src/shared/constants/request.constant';
+import { UserAccessTokenClaims } from 'src/shared/dto/token-claim';
+
 import { RequestContext } from '../request-context.dto';
 
 // Creates a RequestContext object from Request

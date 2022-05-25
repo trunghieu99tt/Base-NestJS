@@ -3,15 +3,18 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { User } from 'src/modules/user/user.entity';
+import { STRATEGY } from '../constants/strategy.constant';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+export class JwtRefreshStrategy extends PassportStrategy(
+  Strategy,
+  STRATEGY.JWT_REFRESH,
+) {
   constructor(private readonly configService: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
       secretOrKey: configService.get<string>('jwt.secret'),
     });
-    console.log(configService.get<string>('jwt.secret'));
   }
 
   async validate(payload: any): Promise<Partial<User>> {
@@ -20,7 +23,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
      */
     return {
       id: payload.sub,
-      username: payload.username,
     };
   }
 }

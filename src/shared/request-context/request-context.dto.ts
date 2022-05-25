@@ -1,4 +1,4 @@
-import { UserAccessTokenClaims } from '../../modules/auth/dtos/auth-token-output.dto';
+import { UserAccessTokenClaims } from '../dto/token-claim';
 
 export class RequestContext {
   public requestID: string;
