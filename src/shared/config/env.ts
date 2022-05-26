@@ -2,7 +2,6 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-// get env
 export const getEnv = (key: string) => {
   const value = process.env[key];
   return value || '';
@@ -12,17 +11,11 @@ export const getEnv = (key: string) => {
 export const ENVIRONMENT = getEnv('NODE_ENV');
 export const PRODUCTION = ENVIRONMENT === 'production';
 export const DEVELOPMENT = ENVIRONMENT === 'development';
-
 export const PORT = getEnv('PORT');
 
 // project
 export const PROJECT_NAME = getEnv('PROJECT_NAME');
 export const PROJECT_VERSION = getEnv('PROJECT_VERSION');
-
-// Cloudinary
-export const CLOUDINARY_URL = getEnv('CLOUDINARY_URL');
-export const CLOUDINARY_PATH = getEnv('CLOUDINARY_PATH');
-export const CLOUDINARY_PATH_DEV = getEnv('CLOUDINARY_PATH_DEV');
 
 // MongoDB
 export const DB_HOST = getEnv('DB_HOST');
@@ -54,3 +47,9 @@ export const DEFAULT_ADMIN_USER_PASSWORD = getEnv(
 export const DEFAULT_ADMIN_USER_USERNAME = getEnv(
   'DEFAULT_ADMIN_USER_USERNAME',
 );
+
+// redis
+export const REDIS_HOST = getEnv('REDIS_HOST');
+export const REDIS_PORT = getEnv('REDIS_PORT')
+  ? parseInt(getEnv('REDIS_PORT'), 10)
+  : 6379;

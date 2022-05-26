@@ -1,11 +1,20 @@
 import {
+  DB_CHARSET,
   DB_HOST,
+  DB_NAME,
+  DB_PASS,
   DB_PORT,
+  DB_USER,
+  DEFAULT_ADMIN_USER_PASSWORD,
+  DEFAULT_ADMIN_USER_USERNAME,
+  DEFAULT_API_KEY,
   ENVIRONMENT,
   JWT_ACCESS_TOKEN_EXP_IN_SEC,
   JWT_REFRESH_TOKEN_EXP_IN_SEC,
   JWT_SECRET,
   PORT,
+  REDIS_HOST,
+  REDIS_PORT,
 } from './env';
 
 export default (): any => ({
@@ -14,21 +23,21 @@ export default (): any => ({
   database: {
     host: DB_HOST,
     port: DB_PORT,
-    name: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    pass: process.env.DB_PASS,
-    charset: process.env.DB_CHARSET,
+    name: DB_NAME,
+    user: DB_USER,
+    pass: DB_PASS,
+    charset: DB_CHARSET,
   },
   redis: {
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT, 10) : 6379,
+    host: REDIS_HOST,
+    port: REDIS_PORT,
   },
   jwt: {
     secret: JWT_SECRET,
     accessTokenExpiresInSec: JWT_ACCESS_TOKEN_EXP_IN_SEC,
     refreshTokenExpiresInSec: JWT_REFRESH_TOKEN_EXP_IN_SEC,
   },
-  defaultApiKey: process.env.DEFAULT_API_KEY,
-  defaultAdminUserPassword: process.env.DEFAULT_ADMIN_USER_PASSWORD,
-  defaultAdminUserUsername: process.env.DEFAULT_ADMIN_USER_USERNAME,
+  defaultApiKey: DEFAULT_API_KEY,
+  defaultAdminUserPassword: DEFAULT_ADMIN_USER_PASSWORD,
+  defaultAdminUserUsername: DEFAULT_ADMIN_USER_USERNAME,
 });

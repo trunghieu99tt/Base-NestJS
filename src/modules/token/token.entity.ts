@@ -10,8 +10,8 @@ import {
 } from 'typeorm';
 
 @Entity()
-@Index(['key', 'userId'])
-@Unique(['key'])
+@Index(['accessToken', 'userId'])
+@Unique(['accessToken'])
 export class Token {
   @PrimaryGeneratedColumn({
     type: 'bigint',
