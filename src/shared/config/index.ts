@@ -15,6 +15,7 @@ import {
   PORT,
   REDIS_HOST,
   REDIS_PORT,
+  SLACK_WEBHOOK,
 } from './env';
 
 export default (): any => ({
@@ -36,6 +37,9 @@ export default (): any => ({
     secret: JWT_SECRET,
     accessTokenExpiresInSec: JWT_ACCESS_TOKEN_EXP_IN_SEC,
     refreshTokenExpiresInSec: JWT_REFRESH_TOKEN_EXP_IN_SEC,
+  },
+  slack: {
+    webhook: SLACK_WEBHOOK,
   },
   defaultApiKey: DEFAULT_API_KEY,
   defaultAdminUserPassword: DEFAULT_ADMIN_USER_PASSWORD,

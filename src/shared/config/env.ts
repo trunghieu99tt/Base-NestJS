@@ -53,3 +53,6 @@ export const REDIS_HOST = getEnv('REDIS_HOST');
 export const REDIS_PORT = getEnv('REDIS_PORT')
   ? parseInt(getEnv('REDIS_PORT'), 10)
   : 6379;
+
+// slack
+export const SLACK_WEBHOOK = getEnv('SLACK_WEBHOOK');
