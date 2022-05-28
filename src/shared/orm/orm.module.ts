@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { config } from 'dotenv';
 import { TokenRepository } from 'src/modules/token/token.repository';
 import { UserRepository } from 'src/modules/user/user.repository';
 
