@@ -16,6 +16,7 @@ import {
   REDIS_HOST,
   REDIS_PORT,
   SLACK_WEBHOOK,
+  TWO_FACTOR_AUTHENTICATION_APP_NAME,
 } from './env';
 
 export default (): any => ({
@@ -44,4 +45,7 @@ export default (): any => ({
   defaultApiKey: DEFAULT_API_KEY,
   defaultAdminUserPassword: DEFAULT_ADMIN_USER_PASSWORD,
   defaultAdminUserUsername: DEFAULT_ADMIN_USER_USERNAME,
+  twoFactorAuth: {
+    appName: TWO_FACTOR_AUTHENTICATION_APP_NAME,
+  },
 });

@@ -56,3 +56,8 @@ export const REDIS_PORT = getEnv('REDIS_PORT')
 
 // slack
 export const SLACK_WEBHOOK = getEnv('SLACK_WEBHOOK');
+
+// 2fa
+export const TWO_FACTOR_AUTHENTICATION_APP_NAME = getEnv(
+  'TWO_FACTOR_AUTHENTICATION_APP_NAME',
+);

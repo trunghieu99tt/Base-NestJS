@@ -5,13 +5,13 @@ import { plainToInstance } from 'class-transformer';
 import { UserAccessTokenClaims } from 'src/shared/dto/token-claim';
 import { AppLogger } from 'src/shared/logger/logger.service';
 import { RequestContext } from 'src/shared/request-context/request-context.dto';
-import { Token } from '../token/token.entity';
-import { TokenRepository } from '../token/token.repository';
-import { User } from '../user/user.entity';
-import { UserRepository } from '../user/user.repository';
-import { AuthOutput } from './dto/auth-output.dto';
-import { AuthTokenOutput } from './dto/auth-token-output.dto';
-import { RegisterInput } from './dto/register-input.dto';
+import { Token } from '../../token/token.entity';
+import { TokenRepository } from '../../token/token.repository';
+import { User } from '../../user/user.entity';
+import { UserRepository } from '../../user/user.repository';
+import { AuthOutput } from '../dto/auth-output.dto';
+import { AuthTokenOutput } from '../dto/auth-token-output.dto';
+import { RegisterInput } from '../dto/register-input.dto';
 
 @Injectable()
 export class AuthService {
