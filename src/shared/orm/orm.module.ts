@@ -11,7 +11,6 @@ import { UserRepository } from 'src/modules/user/user.repository';
       inject: [ConfigService],
 
       useFactory: async (configService: ConfigService) => {
-        console.log(configService.get('database'));
         return {
           type: 'mysql',
           keepConnectionAlive: true,

@@ -1,4 +1,8 @@
 import {
+  APP_DESCRIPTION,
+  APP_NAME,
+  APP_SERVICE_NAME,
+  APP_VERSION,
   DB_CHARSET,
   DB_HOST,
   DB_NAME,
@@ -22,6 +26,13 @@ import {
 export default (): any => ({
   env: ENVIRONMENT,
   port: PORT,
+  app: {
+    name: APP_NAME || '',
+    description: APP_DESCRIPTION || '',
+    version: APP_VERSION || 'v1',
+    serviceName: APP_SERVICE_NAME || '',
+  },
+
   database: {
     host: DB_HOST,
     port: DB_PORT,

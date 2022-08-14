@@ -11,7 +11,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: configService.get<string>('jwt.secret'),
     });
-    console.log(configService.get<string>('jwt.secret'));
   }
 
   async validate(payload: any): Promise<Partial<User>> {

@@ -16,8 +16,10 @@ export const PORT = getEnv('APP_PORT')
   : 3000;
 
 // project
-export const PROJECT_NAME = getEnv('PROJECT_NAME');
-export const PROJECT_VERSION = getEnv('PROJECT_VERSION');
+export const APP_NAME = getEnv('APP_NAME');
+export const APP_DESCRIPTION = getEnv('APP_DESCRIPTION');
+export const APP_VERSION = getEnv('APP_VERSION');
+export const APP_SERVICE_NAME = getEnv('APP_SERVICE_NAME');
 
 // MongoDB
 export const DB_HOST = getEnv('DB_HOST');
@@ -42,7 +44,7 @@ export const JWT_REFRESH_TOKEN_EXP_IN_SEC = getEnv(
 )
   ? parseInt(getEnv('JWT_REFRESH_TOKEN_EXP_IN_SEC'))
   : undefined;
-export const DEFAULT_API_KEY = getEnv('DEFAULT_API_KEY');
+export const APP_API_KEY = getEnv('APP_API_KEY');
 export const DEFAULT_ADMIN_USER_PASSWORD = getEnv(
   'DEFAULT_ADMIN_USER_PASSWORD',
 );
@@ -63,3 +65,8 @@ export const SLACK_WEBHOOK = getEnv('SLACK_WEBHOOK');
 export const TWO_FACTOR_AUTHENTICATION_APP_NAME = getEnv(
   'TWO_FACTOR_AUTHENTICATION_APP_NAME',
 );
+
+// testing
+export const TEST_DATABASE_HOST = getEnv('TEST_DATABASE_HOST');
+export const TEST_DATABASE_PORT = getEnv('TEST_DATABASE_PORT');
+export const TEST_DATABASE_NAME = getEnv('TEST_DATABASE_NAME');
