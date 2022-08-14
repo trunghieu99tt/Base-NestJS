@@ -10,8 +10,8 @@ services:
     volumes:
       - mysqldata:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: my-secret-pw
-      MYSQL_DATABASE: backenddb
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
 
   redis:
     image: 'redis:alpine'

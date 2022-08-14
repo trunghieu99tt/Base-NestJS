@@ -10,7 +10,6 @@ import {
 } from 'typeorm';
 
 @Entity()
-@Index(['accessToken', 'userId'])
 @Unique(['accessToken'])
 export class Token {
   @PrimaryGeneratedColumn({
@@ -21,6 +20,7 @@ export class Token {
   @Column({
     name: 'user_id',
   })
+  @Index()
   userId: number;
 
   @Column()

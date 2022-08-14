@@ -5,6 +5,7 @@ import {
   MinLength,
   validateOrReject,
 } from 'class-validator';
+import { MyBaseEntity } from '../../shared/orm/base.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -17,7 +18,7 @@ import { USER_CONSTRAINTS } from './user.constant';
 
 @Entity()
 @Unique(['username'])
-export class User {
+export class User extends MyBaseEntity {
   @PrimaryGeneratedColumn({
     type: 'bigint',
   })

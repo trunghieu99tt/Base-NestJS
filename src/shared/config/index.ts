@@ -42,7 +42,7 @@ export default (): any => ({
   slack: {
     webhook: SLACK_WEBHOOK,
   },
-  defaultApiKey: DEFAULT_API_KEY,
+  appApiKey: DEFAULT_API_KEY,
   defaultAdminUserPassword: DEFAULT_ADMIN_USER_PASSWORD,
   defaultAdminUserUsername: DEFAULT_ADMIN_USER_USERNAME,
   twoFactorAuth: {

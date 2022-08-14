@@ -11,7 +11,9 @@ export const getEnv = (key: string) => {
 export const ENVIRONMENT = getEnv('NODE_ENV');
 export const PRODUCTION = ENVIRONMENT === 'production';
 export const DEVELOPMENT = ENVIRONMENT === 'development';
-export const PORT = getEnv('PORT');
+export const PORT = getEnv('APP_PORT')
+  ? parseInt(getEnv('APP_PORT'), 10)
+  : 3000;
 
 // project
 export const PROJECT_NAME = getEnv('PROJECT_NAME');
