@@ -1,4 +1,5 @@
 import {
+  APP_API_KEY,
   APP_DESCRIPTION,
   APP_NAME,
   APP_SERVICE_NAME,
@@ -11,7 +12,6 @@ import {
   DB_USER,
   DEFAULT_ADMIN_USER_PASSWORD,
   DEFAULT_ADMIN_USER_USERNAME,
-  DEFAULT_API_KEY,
   ENVIRONMENT,
   JWT_ACCESS_TOKEN_EXP_IN_SEC,
   JWT_REFRESH_TOKEN_EXP_IN_SEC,
@@ -53,7 +53,7 @@ export default (): any => ({
   slack: {
     webhook: SLACK_WEBHOOK,
   },
-  appApiKey: DEFAULT_API_KEY,
+  appApiKey: APP_API_KEY,
   defaultAdminUserPassword: DEFAULT_ADMIN_USER_PASSWORD,
   defaultAdminUserUsername: DEFAULT_ADMIN_USER_USERNAME,
   twoFactorAuth: {

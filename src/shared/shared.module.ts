@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { MyCacheModule } from './cache/cache.module';
 import { configModuleOptions } from './config/config-options';
 import { AllExceptionsFilter } from './filters/all-exception-filter';
 import { LoggingInterceptor } from './interceptors/logger.interceptor';
@@ -14,6 +15,7 @@ import { RedisModule } from './redis/redis.module';
     OrmModule,
     RedisModule,
     AppLoggerModule,
+    MyCacheModule,
   ],
   providers: [
     { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },
