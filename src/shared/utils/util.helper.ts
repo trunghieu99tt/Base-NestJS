@@ -9,3 +9,14 @@ export const parseJson = (data: string): Record<string, unknown> | null => {
   }
   return null;
 };
+
+export const getType = (value: unknown) => {
+  const returnValue = Object.prototype.toString.call(value);
+  const typeString = returnValue.substring(
+    returnValue.indexOf(' ') + 1,
+    returnValue.indexOf(']'),
+  );
+  return typeString.toLowerCase();
+};
+
+export const isExistingObject = (u: unknown) => getType(u) === 'object';
